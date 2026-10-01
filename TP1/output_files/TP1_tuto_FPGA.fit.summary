@@ -1,4 +1,4 @@
-Fitter Status : Successful - Thu Oct  1 10:56:37 2026
+Fitter Status : Successful - Thu Oct  1 11:08:18 2026
 Quartus Prime Version : 25.1std.0 Build 1129 10/21/2025 SC Lite Edition
 Revision Name : TP1_tuto_FPGA
 Top-level Entity Name : led_blink
@@ -6,7 +6,7 @@ Family : Cyclone V
 Device : 5CSEBA6U23I7
 Timing Models : Final
 Logic utilization (in ALMs) : 17 / 41,910 ( < 1 % )
-Total registers : 38
+Total registers : 41
 Total pins : 12 / 314 ( 4 % )
 Total virtual pins : 0
 Total block memory bits : 0 / 5,662,720 ( 0 % )

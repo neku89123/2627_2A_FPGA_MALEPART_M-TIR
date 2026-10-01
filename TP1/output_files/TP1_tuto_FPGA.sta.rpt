@@ -1,5 +1,5 @@
 Timing Analyzer report for TP1_tuto_FPGA
-Thu Oct  1 10:56:49 2026
+Thu Oct  1 11:08:29 2026
 Quartus Prime Version 25.1std.0 Build 1129 10/21/2025 SC Lite Edition
 
 
@@ -125,7 +125,7 @@ on the Quartus Prime software download page.
 +------------+-----------------+------------+------+
 ; Fmax       ; Restricted Fmax ; Clock Name ; Note ;
 +------------+-----------------+------------+------+
-; 263.92 MHz ; 263.92 MHz      ; i_clk      ;      ;
+; 254.13 MHz ; 254.13 MHz      ; i_clk      ;      ;
 +------------+-----------------+------------+------+
 This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
 
@@ -141,7 +141,7 @@ HTML report is unavailable in plain text report export.
 +-------+--------+---------------------+
 ; Clock ; Slack  ; End Point TNS       ;
 +-------+--------+---------------------+
-; i_clk ; -2.789 ; -76.393             ;
+; i_clk ; -2.935 ; -90.687             ;
 +-------+--------+---------------------+
 
 
@@ -150,7 +150,7 @@ HTML report is unavailable in plain text report export.
 +-------+-------+---------------------+
 ; Clock ; Slack ; End Point TNS       ;
 +-------+-------+---------------------+
-; i_clk ; 0.251 ; 0.000               ;
+; i_clk ; 0.250 ; 0.000               ;
 +-------+-------+---------------------+
 
 
@@ -171,7 +171,7 @@ No paths to report.
 +-------+--------+-----------------------------------+
 ; Clock ; Slack  ; End Point TNS                     ;
 +-------+--------+-----------------------------------+
-; i_clk ; -0.538 ; -29.852                           ;
+; i_clk ; -0.538 ; -32.229                           ;
 +-------+--------+-----------------------------------+
 
 
@@ -186,7 +186,7 @@ No synchronizer chains to report.
 +------------+-----------------+------------+------+
 ; Fmax       ; Restricted Fmax ; Clock Name ; Note ;
 +------------+-----------------+------------+------+
-; 251.45 MHz ; 251.45 MHz      ; i_clk      ;      ;
+; 253.16 MHz ; 253.16 MHz      ; i_clk      ;      ;
 +------------+-----------------+------------+------+
 This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
 
@@ -196,7 +196,7 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +-------+--------+---------------------+
 ; Clock ; Slack  ; End Point TNS       ;
 +-------+--------+---------------------+
-; i_clk ; -2.977 ; -74.333             ;
+; i_clk ; -2.950 ; -89.809             ;
 +-------+--------+---------------------+
 
 
@@ -205,7 +205,7 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +-------+-------+---------------------+
 ; Clock ; Slack ; End Point TNS       ;
 +-------+-------+---------------------+
-; i_clk ; 0.235 ; 0.000               ;
+; i_clk ; 0.238 ; 0.000               ;
 +-------+-------+---------------------+
 
 
@@ -226,7 +226,7 @@ No paths to report.
 +-------+--------+-----------------------------------+
 ; Clock ; Slack  ; End Point TNS                     ;
 +-------+--------+-----------------------------------+
-; i_clk ; -0.538 ; -31.806                           ;
+; i_clk ; -0.538 ; -34.282                           ;
 +-------+--------+-----------------------------------+
 
 
@@ -241,7 +241,7 @@ No synchronizer chains to report.
 +-------+--------+---------------------+
 ; Clock ; Slack  ; End Point TNS       ;
 +-------+--------+---------------------+
-; i_clk ; -0.941 ; -21.616             ;
+; i_clk ; -0.986 ; -27.260             ;
 +-------+--------+---------------------+
 
 
@@ -250,7 +250,7 @@ No synchronizer chains to report.
 +-------+-------+---------------------+
 ; Clock ; Slack ; End Point TNS       ;
 +-------+-------+---------------------+
-; i_clk ; 0.142 ; 0.000               ;
+; i_clk ; 0.137 ; 0.000               ;
 +-------+-------+---------------------+
 
 
@@ -271,7 +271,7 @@ No paths to report.
 +-------+--------+-----------------------------------+
 ; Clock ; Slack  ; End Point TNS                     ;
 +-------+--------+-----------------------------------+
-; i_clk ; -0.094 ; -3.443                            ;
+; i_clk ; -0.094 ; -3.719                            ;
 +-------+--------+-----------------------------------+
 
 
@@ -286,7 +286,7 @@ No synchronizer chains to report.
 +-------+--------+---------------------+
 ; Clock ; Slack  ; End Point TNS       ;
 +-------+--------+---------------------+
-; i_clk ; -0.696 ; -15.777             ;
+; i_clk ; -0.757 ; -21.046             ;
 +-------+--------+---------------------+
 
 
@@ -295,7 +295,7 @@ No synchronizer chains to report.
 +-------+-------+---------------------+
 ; Clock ; Slack ; End Point TNS       ;
 +-------+-------+---------------------+
-; i_clk ; 0.127 ; 0.000               ;
+; i_clk ; 0.121 ; 0.000               ;
 +-------+-------+---------------------+
 
 
@@ -316,7 +316,7 @@ No paths to report.
 +-------+--------+-----------------------------------+
 ; Clock ; Slack  ; End Point TNS                     ;
 +-------+--------+-----------------------------------+
-; i_clk ; -0.091 ; -3.361                            ;
+; i_clk ; -0.091 ; -3.634                            ;
 +-------+--------+-----------------------------------+
 
 
@@ -331,10 +331,10 @@ No synchronizer chains to report.
 +------------------+---------+-------+----------+---------+---------------------+
 ; Clock            ; Setup   ; Hold  ; Recovery ; Removal ; Minimum Pulse Width ;
 +------------------+---------+-------+----------+---------+---------------------+
-; Worst-case Slack ; -2.977  ; 0.127 ; N/A      ; N/A     ; -0.538              ;
-;  i_clk           ; -2.977  ; 0.127 ; N/A      ; N/A     ; -0.538              ;
-; Design-wide TNS  ; -76.393 ; 0.0   ; 0.0      ; 0.0     ; -31.806             ;
-;  i_clk           ; -76.393 ; 0.000 ; N/A      ; N/A     ; -31.806             ;
+; Worst-case Slack ; -2.950  ; 0.121 ; N/A      ; N/A     ; -0.538              ;
+;  i_clk           ; -2.950  ; 0.121 ; N/A      ; N/A     ; -0.538              ;
+; Design-wide TNS  ; -90.687 ; 0.0   ; 0.0      ; 0.0     ; -34.282             ;
+;  i_clk           ; -90.687 ; 0.000 ; N/A      ; N/A     ; -34.282             ;
 +------------------+---------+-------+----------+---------+---------------------+
 
 
@@ -376,7 +376,7 @@ No synchronizer chains to report.
 ; o_leds[2] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 1.56e-08 V                   ; 2.43 V              ; -0.0617 V           ; 0.35 V                               ; 0.107 V                              ; 3.1e-10 s                   ; 4.28e-10 s                  ; No                         ; No                         ; 2.32 V                      ; 1.56e-08 V                  ; 2.43 V             ; -0.0617 V          ; 0.35 V                              ; 0.107 V                             ; 3.1e-10 s                  ; 4.28e-10 s                 ; No                        ; No                        ;
 ; o_leds[3] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 1.33e-08 V                   ; 2.36 V              ; -0.0253 V           ; 0.132 V                              ; 0.078 V                              ; 4.45e-10 s                  ; 4.26e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 1.33e-08 V                  ; 2.36 V             ; -0.0253 V          ; 0.132 V                             ; 0.078 V                             ; 4.45e-10 s                 ; 4.26e-10 s                 ; No                        ; Yes                       ;
 ; o_leds[4] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 1.6e-08 V                    ; 2.42 V              ; -0.0509 V           ; 0.197 V                              ; 0.118 V                              ; 4.57e-10 s                  ; 4.47e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 1.6e-08 V                   ; 2.42 V             ; -0.0509 V          ; 0.197 V                             ; 0.118 V                             ; 4.57e-10 s                 ; 4.47e-10 s                 ; No                        ; Yes                       ;
-; o_leds[5] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 1.56e-08 V                   ; 2.43 V              ; -0.0617 V           ; 0.35 V                               ; 0.107 V                              ; 3.1e-10 s                   ; 4.28e-10 s                  ; No                         ; No                         ; 2.32 V                      ; 1.56e-08 V                  ; 2.43 V             ; -0.0617 V          ; 0.35 V                              ; 0.107 V                             ; 3.1e-10 s                  ; 4.28e-10 s                 ; No                        ; No                        ;
+; o_leds[5] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 1.56e-08 V                   ; 2.43 V              ; -0.0607 V           ; 0.35 V                               ; 0.108 V                              ; 3.1e-10 s                   ; 4.28e-10 s                  ; No                         ; No                         ; 2.32 V                      ; 1.56e-08 V                  ; 2.43 V             ; -0.0607 V          ; 0.35 V                              ; 0.108 V                             ; 3.1e-10 s                  ; 4.28e-10 s                 ; No                        ; No                        ;
 ; o_leds[6] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 1.6e-08 V                    ; 2.42 V              ; -0.0509 V           ; 0.197 V                              ; 0.118 V                              ; 4.57e-10 s                  ; 4.47e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 1.6e-08 V                   ; 2.42 V             ; -0.0509 V          ; 0.197 V                             ; 0.118 V                             ; 4.57e-10 s                 ; 4.47e-10 s                 ; No                        ; Yes                       ;
 ; o_leds[7] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 1.56e-08 V                   ; 2.43 V              ; -0.0607 V           ; 0.35 V                               ; 0.108 V                              ; 3.1e-10 s                   ; 4.28e-10 s                  ; No                         ; No                         ; 2.32 V                      ; 1.56e-08 V                  ; 2.43 V             ; -0.0607 V          ; 0.35 V                              ; 0.108 V                             ; 3.1e-10 s                  ; 4.28e-10 s                 ; No                        ; No                        ;
 ; o_leds[8] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 1.56e-08 V                   ; 2.43 V              ; -0.0617 V           ; 0.35 V                               ; 0.107 V                              ; 3.1e-10 s                   ; 4.28e-10 s                  ; No                         ; No                         ; 2.32 V                      ; 1.56e-08 V                  ; 2.43 V             ; -0.0617 V          ; 0.35 V                              ; 0.107 V                             ; 3.1e-10 s                  ; 4.28e-10 s                 ; No                        ; No                        ;
@@ -394,7 +394,7 @@ No synchronizer chains to report.
 ; o_leds[2] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 4.73e-05 V                   ; 2.38 V              ; -0.0301 V           ; 0.21 V                               ; 0.2 V                                ; 4.78e-10 s                  ; 4.96e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 4.73e-05 V                  ; 2.38 V             ; -0.0301 V          ; 0.21 V                              ; 0.2 V                               ; 4.78e-10 s                 ; 4.96e-10 s                 ; No                        ; Yes                       ;
 ; o_leds[3] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 4.28e-05 V                   ; 2.34 V              ; -0.00773 V          ; 0.214 V                              ; 0.065 V                              ; 5.06e-10 s                  ; 5.4e-10 s                   ; Yes                        ; Yes                        ; 2.32 V                      ; 4.28e-05 V                  ; 2.34 V             ; -0.00773 V         ; 0.214 V                             ; 0.065 V                             ; 5.06e-10 s                 ; 5.4e-10 s                  ; Yes                       ; Yes                       ;
 ; o_leds[4] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 4.81e-05 V                   ; 2.37 V              ; -0.0242 V           ; 0.257 V                              ; 0.097 V                              ; 5.03e-10 s                  ; 6.18e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 4.81e-05 V                  ; 2.37 V             ; -0.0242 V          ; 0.257 V                             ; 0.097 V                             ; 5.03e-10 s                 ; 6.18e-10 s                 ; No                        ; Yes                       ;
-; o_leds[5] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 4.73e-05 V                   ; 2.38 V              ; -0.0301 V           ; 0.21 V                               ; 0.2 V                                ; 4.78e-10 s                  ; 4.96e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 4.73e-05 V                  ; 2.38 V             ; -0.0301 V          ; 0.21 V                              ; 0.2 V                               ; 4.78e-10 s                 ; 4.96e-10 s                 ; No                        ; Yes                       ;
+; o_leds[5] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 4.73e-05 V                   ; 2.38 V              ; -0.0297 V           ; 0.21 V                               ; 0.199 V                              ; 4.77e-10 s                  ; 4.97e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 4.73e-05 V                  ; 2.38 V             ; -0.0297 V          ; 0.21 V                              ; 0.199 V                             ; 4.77e-10 s                 ; 4.97e-10 s                 ; No                        ; Yes                       ;
 ; o_leds[6] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 4.81e-05 V                   ; 2.37 V              ; -0.0242 V           ; 0.257 V                              ; 0.097 V                              ; 5.03e-10 s                  ; 6.18e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 4.81e-05 V                  ; 2.37 V             ; -0.0242 V          ; 0.257 V                             ; 0.097 V                             ; 5.03e-10 s                 ; 6.18e-10 s                 ; No                        ; Yes                       ;
 ; o_leds[7] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 4.73e-05 V                   ; 2.38 V              ; -0.0297 V           ; 0.21 V                               ; 0.199 V                              ; 4.77e-10 s                  ; 4.97e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 4.73e-05 V                  ; 2.38 V             ; -0.0297 V          ; 0.21 V                              ; 0.199 V                             ; 4.77e-10 s                 ; 4.97e-10 s                 ; No                        ; Yes                       ;
 ; o_leds[8] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.32 V                       ; 4.73e-05 V                   ; 2.38 V              ; -0.0301 V           ; 0.21 V                               ; 0.2 V                                ; 4.78e-10 s                  ; 4.96e-10 s                  ; No                         ; Yes                        ; 2.32 V                      ; 4.73e-05 V                  ; 2.38 V             ; -0.0301 V          ; 0.21 V                              ; 0.2 V                               ; 4.78e-10 s                 ; 4.96e-10 s                 ; No                        ; Yes                       ;
@@ -412,7 +412,7 @@ No synchronizer chains to report.
 ; o_leds[2] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.75 V                       ; 2.38e-07 V                   ; 2.94 V              ; -0.135 V            ; 0.31 V                               ; 0.268 V                              ; 2.65e-10 s                  ; 2.64e-10 s                  ; No                         ; Yes                        ; 2.75 V                      ; 2.38e-07 V                  ; 2.94 V             ; -0.135 V           ; 0.31 V                              ; 0.268 V                             ; 2.65e-10 s                 ; 2.64e-10 s                 ; No                        ; Yes                       ;
 ; o_leds[3] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.75 V                       ; 1.99e-07 V                   ; 2.83 V              ; -0.0718 V           ; 0.269 V                              ; 0.234 V                              ; 2.77e-10 s                  ; 2.75e-10 s                  ; Yes                        ; Yes                        ; 2.75 V                      ; 1.99e-07 V                  ; 2.83 V             ; -0.0718 V          ; 0.269 V                             ; 0.234 V                             ; 2.77e-10 s                 ; 2.75e-10 s                 ; Yes                       ; Yes                       ;
 ; o_leds[4] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.75 V                       ; 2.45e-07 V                   ; 2.93 V              ; -0.127 V            ; 0.351 V                              ; 0.317 V                              ; 2.74e-10 s                  ; 2.82e-10 s                  ; No                         ; No                         ; 2.75 V                      ; 2.45e-07 V                  ; 2.93 V             ; -0.127 V           ; 0.351 V                             ; 0.317 V                             ; 2.74e-10 s                 ; 2.82e-10 s                 ; No                        ; No                        ;
-; o_leds[5] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.75 V                       ; 2.38e-07 V                   ; 2.94 V              ; -0.135 V            ; 0.31 V                               ; 0.268 V                              ; 2.65e-10 s                  ; 2.64e-10 s                  ; No                         ; Yes                        ; 2.75 V                      ; 2.38e-07 V                  ; 2.94 V             ; -0.135 V           ; 0.31 V                              ; 0.268 V                             ; 2.65e-10 s                 ; 2.64e-10 s                 ; No                        ; Yes                       ;
+; o_leds[5] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.75 V                       ; 2.38e-07 V                   ; 2.94 V              ; -0.139 V            ; 0.31 V                               ; 0.268 V                              ; 2.65e-10 s                  ; 2.63e-10 s                  ; No                         ; Yes                        ; 2.75 V                      ; 2.38e-07 V                  ; 2.94 V             ; -0.139 V           ; 0.31 V                              ; 0.268 V                             ; 2.65e-10 s                 ; 2.63e-10 s                 ; No                        ; Yes                       ;
 ; o_leds[6] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.75 V                       ; 2.45e-07 V                   ; 2.93 V              ; -0.127 V            ; 0.351 V                              ; 0.317 V                              ; 2.74e-10 s                  ; 2.82e-10 s                  ; No                         ; No                         ; 2.75 V                      ; 2.45e-07 V                  ; 2.93 V             ; -0.127 V           ; 0.351 V                             ; 0.317 V                             ; 2.74e-10 s                 ; 2.82e-10 s                 ; No                        ; No                        ;
 ; o_leds[7] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.75 V                       ; 2.38e-07 V                   ; 2.94 V              ; -0.139 V            ; 0.31 V                               ; 0.268 V                              ; 2.65e-10 s                  ; 2.63e-10 s                  ; No                         ; Yes                        ; 2.75 V                      ; 2.38e-07 V                  ; 2.94 V             ; -0.139 V           ; 0.31 V                              ; 0.268 V                             ; 2.65e-10 s                 ; 2.63e-10 s                 ; No                        ; Yes                       ;
 ; o_leds[8] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.75 V                       ; 2.38e-07 V                   ; 2.94 V              ; -0.135 V            ; 0.31 V                               ; 0.268 V                              ; 2.65e-10 s                  ; 2.64e-10 s                  ; No                         ; Yes                        ; 2.75 V                      ; 2.38e-07 V                  ; 2.94 V             ; -0.135 V           ; 0.31 V                              ; 0.268 V                             ; 2.65e-10 s                 ; 2.64e-10 s                 ; No                        ; Yes                       ;
@@ -430,7 +430,7 @@ No synchronizer chains to report.
 ; o_leds[2] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.75 V                       ; 0.00041 V                    ; 2.85 V              ; -0.076 V            ; 0.363 V                              ; 0.16 V                               ; 3.08e-10 s                  ; 4.37e-10 s                  ; No                         ; No                         ; 2.75 V                      ; 0.00041 V                   ; 2.85 V             ; -0.076 V           ; 0.363 V                             ; 0.16 V                              ; 3.08e-10 s                 ; 4.37e-10 s                 ; No                        ; No                        ;
 ; o_leds[3] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.75 V                       ; 0.000362 V                   ; 2.79 V              ; -0.0303 V           ; 0.139 V                              ; 0.127 V                              ; 4.44e-10 s                  ; 4.38e-10 s                  ; No                         ; Yes                        ; 2.75 V                      ; 0.000362 V                  ; 2.79 V             ; -0.0303 V          ; 0.139 V                             ; 0.127 V                             ; 4.44e-10 s                 ; 4.38e-10 s                 ; No                        ; Yes                       ;
 ; o_leds[4] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.75 V                       ; 0.000419 V                   ; 2.85 V              ; -0.0671 V           ; 0.203 V                              ; 0.19 V                               ; 4.57e-10 s                  ; 4.54e-10 s                  ; No                         ; No                         ; 2.75 V                      ; 0.000419 V                  ; 2.85 V             ; -0.0671 V          ; 0.203 V                             ; 0.19 V                              ; 4.57e-10 s                 ; 4.54e-10 s                 ; No                        ; No                        ;
-; o_leds[5] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.75 V                       ; 0.00041 V                    ; 2.85 V              ; -0.076 V            ; 0.363 V                              ; 0.16 V                               ; 3.08e-10 s                  ; 4.37e-10 s                  ; No                         ; No                         ; 2.75 V                      ; 0.00041 V                   ; 2.85 V             ; -0.076 V           ; 0.363 V                             ; 0.16 V                              ; 3.08e-10 s                 ; 4.37e-10 s                 ; No                        ; No                        ;
+; o_leds[5] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.75 V                       ; 0.00041 V                    ; 2.85 V              ; -0.0763 V           ; 0.365 V                              ; 0.161 V                              ; 3.08e-10 s                  ; 4.37e-10 s                  ; No                         ; No                         ; 2.75 V                      ; 0.00041 V                   ; 2.85 V             ; -0.0763 V          ; 0.365 V                             ; 0.161 V                             ; 3.08e-10 s                 ; 4.37e-10 s                 ; No                        ; No                        ;
 ; o_leds[6] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.75 V                       ; 0.000419 V                   ; 2.85 V              ; -0.0671 V           ; 0.203 V                              ; 0.19 V                               ; 4.57e-10 s                  ; 4.54e-10 s                  ; No                         ; No                         ; 2.75 V                      ; 0.000419 V                  ; 2.85 V             ; -0.0671 V          ; 0.203 V                             ; 0.19 V                              ; 4.57e-10 s                 ; 4.54e-10 s                 ; No                        ; No                        ;
 ; o_leds[7] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.75 V                       ; 0.00041 V                    ; 2.85 V              ; -0.0763 V           ; 0.365 V                              ; 0.161 V                              ; 3.08e-10 s                  ; 4.37e-10 s                  ; No                         ; No                         ; 2.75 V                      ; 0.00041 V                   ; 2.85 V             ; -0.0763 V          ; 0.365 V                             ; 0.161 V                             ; 3.08e-10 s                 ; 4.37e-10 s                 ; No                        ; No                        ;
 ; o_leds[8] ; 2.5 V        ; 0 s                 ; 0 s                 ; 2.75 V                       ; 0.00041 V                    ; 2.85 V              ; -0.076 V            ; 0.363 V                              ; 0.16 V                               ; 3.08e-10 s                  ; 4.37e-10 s                  ; No                         ; No                         ; 2.75 V                      ; 0.00041 V                   ; 2.85 V             ; -0.076 V           ; 0.363 V                             ; 0.16 V                              ; 3.08e-10 s                 ; 4.37e-10 s                 ; No                        ; No                        ;
@@ -443,7 +443,7 @@ No synchronizer chains to report.
 +------------+----------+----------+----------+----------+----------+
 ; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +------------+----------+----------+----------+----------+----------+
-; i_clk      ; i_clk    ; 968      ; 0        ; 0        ; 0        ;
+; i_clk      ; i_clk    ; 1000     ; 0        ; 0        ; 0        ;
 +------------+----------+----------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
 
@@ -453,7 +453,7 @@ Entries labeled "false path" only account for clock-to-clock false paths and not
 +------------+----------+----------+----------+----------+----------+
 ; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +------------+----------+----------+----------+----------+----------+
-; i_clk      ; i_clk    ; 968      ; 0        ; 0        ; 0        ;
+; i_clk      ; i_clk    ; 1000     ; 0        ; 0        ; 0        ;
 +------------+----------+----------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
 
@@ -478,7 +478,7 @@ No non-DPA dedicated SERDES Receiver circuitry present in device or used in desi
 ; Illegal Clocks                  ; 0     ; 0    ;
 ; Unconstrained Clocks            ; 0     ; 0    ;
 ; Unconstrained Input Ports       ; 1     ; 1    ;
-; Unconstrained Input Port Paths  ; 38    ; 38   ;
+; Unconstrained Input Port Paths  ; 41    ; 41   ;
 ; Unconstrained Output Ports      ; 10    ; 10   ;
 ; Unconstrained Output Port Paths ; 10    ; 10   ;
 +---------------------------------+-------+------+
@@ -553,7 +553,7 @@ No non-DPA dedicated SERDES Receiver circuitry present in device or used in desi
 Info: *******************************************************************
 Info: Running Quartus Prime Timing Analyzer
     Info: Version 25.1std.0 Build 1129 10/21/2025 SC Lite Edition
-    Info: Processing started: Thu Oct  1 10:56:44 2026
+    Info: Processing started: Thu Oct  1 11:08:25 2026
 Info: Command: quartus_sta TP1_tuto_FPGA -c TP1_tuto_FPGA
 Info: qsta_default_script.tcl version: #1
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
@@ -570,84 +570,84 @@ Info: Found TIMING_ANALYZER_REPORT_SCRIPT_INCLUDE_DEFAULT_ANALYSIS = ON
 Info: Analyzing Slow 1100mV 100C Model
 Critical Warning (332148): Timing requirements not met
     Info (11105): For recommendations on closing timing, run Report Timing Closure Recommendations in the Timing Analyzer.
-Info (332146): Worst-case setup slack is -2.789
+Info (332146): Worst-case setup slack is -2.935
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    -2.789             -76.393 i_clk 
-Info (332146): Worst-case hold slack is 0.251
+    Info (332119):    -2.935             -90.687 i_clk 
+Info (332146): Worst-case hold slack is 0.250
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.251               0.000 i_clk 
+    Info (332119):     0.250               0.000 i_clk 
 Info (332140): No Recovery paths to report
 Info (332140): No Removal paths to report
 Info (332146): Worst-case minimum pulse width slack is -0.538
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    -0.538             -29.852 i_clk 
+    Info (332119):    -0.538             -32.229 i_clk 
 Info: Analyzing Slow 1100mV -40C Model
 Info (334003): Started post-fitting delay annotation
 Info (334004): Delay annotation completed successfully
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
 Critical Warning (332148): Timing requirements not met
     Info (11105): For recommendations on closing timing, run Report Timing Closure Recommendations in the Timing Analyzer.
-Info (332146): Worst-case setup slack is -2.977
+Info (332146): Worst-case setup slack is -2.950
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    -2.977             -74.333 i_clk 
-Info (332146): Worst-case hold slack is 0.235
+    Info (332119):    -2.950             -89.809 i_clk 
+Info (332146): Worst-case hold slack is 0.238
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.235               0.000 i_clk 
+    Info (332119):     0.238               0.000 i_clk 
 Info (332140): No Recovery paths to report
 Info (332140): No Removal paths to report
 Info (332146): Worst-case minimum pulse width slack is -0.538
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    -0.538             -31.806 i_clk 
+    Info (332119):    -0.538             -34.282 i_clk 
 Info: Analyzing Fast 1100mV 100C Model
 Info (334003): Started post-fitting delay annotation
 Info (334004): Delay annotation completed successfully
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
 Critical Warning (332148): Timing requirements not met
     Info (11105): For recommendations on closing timing, run Report Timing Closure Recommendations in the Timing Analyzer.
-Info (332146): Worst-case setup slack is -0.941
+Info (332146): Worst-case setup slack is -0.986
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    -0.941             -21.616 i_clk 
-Info (332146): Worst-case hold slack is 0.142
+    Info (332119):    -0.986             -27.260 i_clk 
+Info (332146): Worst-case hold slack is 0.137
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.142               0.000 i_clk 
+    Info (332119):     0.137               0.000 i_clk 
 Info (332140): No Recovery paths to report
 Info (332140): No Removal paths to report
 Info (332146): Worst-case minimum pulse width slack is -0.094
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    -0.094              -3.443 i_clk 
+    Info (332119):    -0.094              -3.719 i_clk 
 Info: Analyzing Fast 1100mV -40C Model
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
 Critical Warning (332148): Timing requirements not met
     Info (11105): For recommendations on closing timing, run Report Timing Closure Recommendations in the Timing Analyzer.
-Info (332146): Worst-case setup slack is -0.696
+Info (332146): Worst-case setup slack is -0.757
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    -0.696             -15.777 i_clk 
-Info (332146): Worst-case hold slack is 0.127
+    Info (332119):    -0.757             -21.046 i_clk 
+Info (332146): Worst-case hold slack is 0.121
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.127               0.000 i_clk 
+    Info (332119):     0.121               0.000 i_clk 
 Info (332140): No Recovery paths to report
 Info (332140): No Removal paths to report
 Info (332146): Worst-case minimum pulse width slack is -0.091
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    -0.091              -3.361 i_clk 
+    Info (332119):    -0.091              -3.634 i_clk 
 Info (332102): Design is not fully constrained for setup requirements
 Info (332102): Design is not fully constrained for hold requirements
 Info: Quartus Prime Timing Analyzer was successful. 0 errors, 6 warnings
-    Info: Peak virtual memory: 5405 megabytes
-    Info: Processing ended: Thu Oct  1 10:56:49 2026
-    Info: Elapsed time: 00:00:05
+    Info: Peak virtual memory: 5401 megabytes
+    Info: Processing ended: Thu Oct  1 11:08:29 2026
+    Info: Elapsed time: 00:00:04
     Info: Total CPU time (on all processors): 00:00:04
 
 

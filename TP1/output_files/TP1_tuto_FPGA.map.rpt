@@ -1,5 +1,5 @@
 Analysis & Synthesis report for TP1_tuto_FPGA
-Thu Oct  1 10:56:01 2026
+Thu Oct  1 11:07:43 2026
 Quartus Prime Version 25.1std.0 Build 1129 10/21/2025 SC Lite Edition
 
 
@@ -44,7 +44,7 @@ on the Quartus Prime software download page.
 +-----------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                      ;
 +---------------------------------+-------------------------------------------------+
-; Analysis & Synthesis Status     ; Successful - Thu Oct  1 10:56:01 2026           ;
+; Analysis & Synthesis Status     ; Successful - Thu Oct  1 11:07:43 2026           ;
 ; Quartus Prime Version           ; 25.1std.0 Build 1129 10/21/2025 SC Lite Edition ;
 ; Revision Name                   ; TP1_tuto_FPGA                                   ;
 ; Top-level Entity Name           ; led_blink                                       ;
@@ -168,13 +168,13 @@ on the Quartus Prime software download page.
 +----------------------------+-------------+
 
 
-+----------------------------------------------------------------------------------------------------------------------------------+
-; Analysis & Synthesis Source Files Read                                                                                           ;
-+----------------------------------+-----------------+-----------------+-------------------------------------------------+---------+
-; File Name with User-Entered Path ; Used in Netlist ; File Type       ; File Name with Absolute Path                    ; Library ;
-+----------------------------------+-----------------+-----------------+-------------------------------------------------+---------+
-; led_blink.vhd                    ; yes             ; User VHDL File  ; C:/Users/alexa/Desktop/2A/FPGA/TP/led_blink.vhd ;         ;
-+----------------------------------+-----------------+-----------------+-------------------------------------------------+---------+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                                           ;
++----------------------------------+-----------------+-----------------+---------------------------------------------------------------------------------+---------+
+; File Name with User-Entered Path ; Used in Netlist ; File Type       ; File Name with Absolute Path                                                    ; Library ;
++----------------------------------+-----------------+-----------------+---------------------------------------------------------------------------------+---------+
+; led_blink.vhd                    ; yes             ; User VHDL File  ; C:/Users/alexa/Desktop/2A/FPGA/TP/2627_2A_FPGA_MALEPART_M-TIR/TP1/led_blink.vhd ;         ;
++----------------------------------+-----------------+-----------------+---------------------------------------------------------------------------------+---------+
 
 
 +-----------------------------------------------------------+
@@ -277,16 +277,16 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 25.1std.0 Build 1129 10/21/2025 SC Lite Edition
-    Info: Processing started: Thu Oct  1 10:55:53 2026
+    Info: Processing started: Thu Oct  1 11:07:36 2026
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off TP1_tuto_FPGA -c TP1_tuto_FPGA
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 12 of the 12 processors detected
 Info (12021): Found 2 design units, including 1 entities, in source file tp1_tuto_fpga.vhd
-    Info (12022): Found design unit 1: TP1_tuto_FPGA-rtl File: C:/Users/alexa/Desktop/2A/FPGA/TP/TP1_tuto_FPGA.vhd Line: 11
-    Info (12023): Found entity 1: TP1_tuto_FPGA File: C:/Users/alexa/Desktop/2A/FPGA/TP/TP1_tuto_FPGA.vhd Line: 4
+    Info (12022): Found design unit 1: TP1_tuto_FPGA-rtl File: C:/Users/alexa/Desktop/2A/FPGA/TP/2627_2A_FPGA_MALEPART_M-TIR/TP1/TP1_tuto_FPGA.vhd Line: 11
+    Info (12023): Found entity 1: TP1_tuto_FPGA File: C:/Users/alexa/Desktop/2A/FPGA/TP/2627_2A_FPGA_MALEPART_M-TIR/TP1/TP1_tuto_FPGA.vhd Line: 4
 Info (12021): Found 2 design units, including 1 entities, in source file led_blink.vhd
-    Info (12022): Found design unit 1: led_blink-rtl File: C:/Users/alexa/Desktop/2A/FPGA/TP/led_blink.vhd Line: 12
-    Info (12023): Found entity 1: led_blink File: C:/Users/alexa/Desktop/2A/FPGA/TP/led_blink.vhd Line: 4
+    Info (12022): Found design unit 1: led_blink-rtl File: C:/Users/alexa/Desktop/2A/FPGA/TP/2627_2A_FPGA_MALEPART_M-TIR/TP1/led_blink.vhd Line: 12
+    Info (12023): Found entity 1: led_blink File: C:/Users/alexa/Desktop/2A/FPGA/TP/2627_2A_FPGA_MALEPART_M-TIR/TP1/led_blink.vhd Line: 4
 Info (12127): Elaborating entity "led_blink" for the top level hierarchy
 Info (286030): Timing-Driven Synthesis is running
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
@@ -296,9 +296,9 @@ Info (21057): Implemented 51 device resources after synthesis - the final resour
     Info (21059): Implemented 10 output pins
     Info (21061): Implemented 39 logic cells
 Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 1 warning
-    Info: Peak virtual memory: 4959 megabytes
-    Info: Processing ended: Thu Oct  1 10:56:01 2026
-    Info: Elapsed time: 00:00:08
-    Info: Total CPU time (on all processors): 00:00:18
+    Info: Peak virtual memory: 4967 megabytes
+    Info: Processing ended: Thu Oct  1 11:07:43 2026
+    Info: Elapsed time: 00:00:07
+    Info: Total CPU time (on all processors): 00:00:16
 
 

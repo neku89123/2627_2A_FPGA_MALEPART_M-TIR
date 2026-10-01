@@ -263,7 +263,7 @@ GND                          : AG17      : gnd    :                   :         
 o_leds[8]                    : AG18      : output : 2.5 V             :         : 4A        : Y              
 RESERVED_INPUT_WITH_WEAK_PULLUP : AG19      :        :                   :         : 4A        :                
 o_leds[7]                    : AG20      : output : 2.5 V             :         : 4A        : Y              
-o_leds[5]                    : AG21      : output : 2.5 V             :         : 4A        : Y              
+RESERVED_INPUT_WITH_WEAK_PULLUP : AG21      :        :                   :         : 4A        :                
 VCCIO4A                      : AG22      : power  :                   : 2.5V    : 4A        :                
 o_leds[4]                    : AG23      : output : 2.5 V             :         : 4A        : Y              
 RESERVED_INPUT_WITH_WEAK_PULLUP : AG24      :        :                   :         : 4A        :                
@@ -290,7 +290,7 @@ i_rst_n                      : AH17      : input  : 2.5 V             :         
 RESERVED_INPUT_WITH_WEAK_PULLUP : AH18      :        :                   :         : 4A        :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : AH19      :        :                   :         : 4A        :                
 GND                          : AH20      : gnd    :                   :         :           :                
-RESERVED_INPUT_WITH_WEAK_PULLUP : AH21      :        :                   :         : 4A        :                
+o_leds[5]                    : AH21      : output : 2.5 V             :         : 4A        : Y              
 RESERVED_INPUT_WITH_WEAK_PULLUP : AH22      :        :                   :         : 4A        :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : AH23      :        :                   :         : 4A        :                
 RESERVED_INPUT_WITH_WEAK_PULLUP : AH24      :        :                   :         : 4A        :                

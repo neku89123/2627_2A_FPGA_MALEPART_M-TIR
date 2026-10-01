@@ -49,8 +49,15 @@ Pour faire allumer la LED, on se rend dans le PIN Planner afin d'assigner chaque
 
 ### Exercice 2 : Logique séquentielle et division d'horloge (`led_blink.vhd`)
 
-On exécute le code fourni par le tp. On visualise le schéma ci-dessous grâce à la fonctionalité RTL:
+On exécute le code fourni par le tp. On réalise d'abord un schéma théorique puis par la suite un autre avec RTL:
+
+Schéma théorique: 
+
+![alt text](TP1/Capture/schema1.png)
+
+Schéma RTL:
 ![alt text](TP1/Capture/clignotement_led_invisible.png)
+
 On compile le programme et on remarque que la led ne clignote pas ! .
 On va donc modifier le code pour que l'on puisse visualiser le clignotement de la LED en ajoutant une horloge qui va être gérer par un process:
 
@@ -103,8 +110,11 @@ begin
 
 end architecture rtl;
 ```
-On réalise le schéma avec RTL:
+On réalise le schéma théorique:
 
+![alt text](TP1/Capture/schema2.jpeg)
+
+Puis un autre avec RTL :
 ![alt text](TP1/Capture/clignotement_led.png)
 
 Une fois fait on assigne les PIN de l'horloge et du reset dans le PIN PLanner et on compile. On implémente le programme et on peut désormais visualiser le clignotement.

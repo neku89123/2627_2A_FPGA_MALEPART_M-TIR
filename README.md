@@ -26,79 +26,27 @@ L'objectif de ce TP est de se familiariser avec le flux de conception FPGA :
 ### Carte FPGA & Composants
 - **FPGA cible :** Cyclone V — `5CSEBA6U23I7`
 - **Programmation :** Port USB dédié **USB BLASTER II** (situé côté alimentation & HDMI).
-- **Alimentation :** Bloc secteur externe requis (le port USB seul ne suffit pas).
+
 
 ---
 
 ## 🚀 Étapes de Configuration du Projet
-
-<details>
-<summary><b>1. Création du projet Quartus</b></summary>
-
-1. Ouvrir Quartus Prime : `File` > `New Project Wizard`.
-2. Indiquer le chemin et le nom du projet (ex: `tuto_fpga`).
-   > ⚠️ **Attention :** Ne pas utiliser d'espaces ni de caractères spéciaux/accentués dans les chemins et noms de fichiers !
-3. Sélectionner `Empty project`.
-4. À l'étape du choix de composant, sélectionner le FPGA **`5CSEBA6U23I7`** *(attention à ne pas choisir les variantes L ou S)*.
-5. Finaliser l'assistant (`Finish`).
+Lors de la création du fichier on sélectionne le FPGA **`5CSEBA6U23I7`** *(on fait attention à ne pas choisir les variantes L ou S)*.
 </details>
 
-<details>
-<summary><b>2. Affectation des broches (Pin Planner)</b></summary>
-
-Après avoir rédigé l'entity et lancé une **Analysis & Synthesis**, ouvrir `Assignments` > `Pin Planner` pour associer les signaux de l'entity aux broches physiques :
-
-| Signal VHDL | Type | Broche FPGA | Description |
-| :--- | :--- | :--- | :--- |
-| `pushl` | Entrada (`in`) | `PIN_AH27` | Bouton poussoir (encodeur gauche) |
-| `led0` | Saída (`out`) | `PIN_AG28` | LED 0 |
-| `KEY0` | Entrada (`in`) | `PIN_AH17` | Bouton poussoir de Reset (`i_rst_n`) |
-| `FPGA_CLK1_50` | Entrada (`in`) | *Voir Manuel* | Horloge principale 50 MHz |
-
-</details>
-
-<details>
-<summary><b>3. Compilation et Programmation</b></summary>
-
-1. Lancer la compilation complète : double-cliquer sur **Compile Design**.
-2. Connecter et alimenter la carte FPGA sur le port **USB BLASTER II**.
-3. Ouvrir l'outil de programmation : `Tools` > `Programmer`.
-4. Cliquer sur **Auto Detect** puis sélectionner la puce `5CSEBA6`.
-5. Charger le fichier `.sof` : `Clic-droit sur la puce` > `Edit` > `Change File` > sélectionner le fichier dans `/output_files/`.
-6. Coucher la case **Program/Configure** et cliquer sur **Start**.
-</details>
 
 ---
 
-## 💻 Structure du Code & Exercices
-
-### Conventions de Nommage
-Pour garantir un code propre et lisible, la convention suivante est adoptée :
-- `i_` : Signaux d'entrée (*inputs*)
-- `o_` : Signaux de sortie (*outputs*)
-- `r_` : Registres
-- `s_` : Signaux internes
-- `_n` : Signal actif à l'état bas (*Active Low*, ex: `i_rst_n`)
-
----
 
 ### Exercice 1 : Contrôle Combinatoire Simple (`tuto_fpga.vhd`)
 
-Raccordement direct d'un bouton poussoir vers une LED (inversion logique appliquée pour allumer la LED à l'appui).
+On exécute le code fourni par le tp. Dans le cadre d'un tuto, l'objectif de ce code est de simplement allumé une LED lorsque le bouton poussoir est maintenu.
+Pour faire allumer la LED, on se rend dans le PIN Planner afin d'assigner chaque sortie et entrée à une Pin de la carte. Une fois fait on compile le programme puis on l'implémente dans la carte.
 
-```vhdl
-library ieee;
-use ieee.std_logic_1164.all;
+---
 
-entity tuto_fpga is
-    port (
-        pushl : in  std_logic;
-        led0  : out std_logic
-    );
-end entity tuto_fpga;
 
-architecture rtl of tuto_fpga is
-begin
-    -- Inversion car le bouton poussoir est actif à l'état bas (0 quand appuyé)
-    led0 <= not pushl;
-end architecture rtl;
+### Exercice 2 : Logique séquentielle et division d'horloge (`led_blink.vhd`)
+
+On exécute le code fourni par le tp.On remarque que la led ne clignote pas ! .
+Pour faire allumer la LED, on se rend dans le PIN Planner afin d'assigner chaque sortie et entrée à une Pin de la carte. Une fois fait on compile le programme puis on l'implémente dans la carte.

@@ -1,0 +1,14 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity TD1_tuto_FPGA is_
+    port (
+        pushl : in std_logic;
+        led0 : out std_logic
+    );
+end entity TD1_tuto_FPGA;
+
+architecture rtl of TD1_tuto_FPGA is
+begin
+    led0 <= pushl;
+end architecture rtl;

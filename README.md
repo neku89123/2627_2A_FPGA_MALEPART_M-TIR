@@ -248,6 +248,19 @@ Cette méthode permet de visualiser directement le balayage horizontal et vertic
 
 la mémoire Dual-Port possède deux ports indépendants qui permettent à deux périphériques d'accéder simultanément à la RAM.
 
+schéma pour mémoriser les pixels:
+(photo)
+
+On instancie le composant `dpram` dans le fichier `telecran.vhd` avec les connexions qui correspondent.
+(photo)
+
+Les modifications apportées au signal `o_hdmi_tx_d`:
+(photo)
+
+## Effacement
+
+
+
 ## Conclusion
 Durant ce TP, nous sommes parvenu a correctement prendre en main le logiciel Quartus, faire analyser, assigner et compiler le programme et le visualiser sur la carte
 

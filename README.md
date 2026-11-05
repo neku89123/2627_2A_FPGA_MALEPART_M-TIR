@@ -240,6 +240,14 @@ Ici :
 
 Cette méthode permet de visualiser directement le balayage horizontal et vertical généré par le contrôleur HDMI.
 
+## Déplacement d'un pixel
+
+(photo modif)
+
+## Mémorisation
+
+la mémoire Dual-Port possède deux ports indépendants qui permettent à deux périphériques d'accéder simultanément à la RAM.
+
 ## Conclusion
 Durant ce TP, nous sommes parvenu a correctement prendre en main le logiciel Quartus, faire analyser, assigner et compiler le programme et le visualiser sur la carte
 

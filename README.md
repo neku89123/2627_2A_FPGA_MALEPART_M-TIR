@@ -194,56 +194,9 @@ Puis assigner les pins a toute les leds:
 
 Enfin on a compiler et implémenter le programme ainsi que visualiser le chenillard sur la carte.
 
+## Intégration du contrôleur HDMI
 
-# TP FPGA – Mise en œuvre du contrôleur HDMI
-
-## 1. Objectif du TP
-
-L’objectif de cette partie du TP est de mettre en œuvre le contrôleur HDMI développé lors du TD précédent afin de générer un signal vidéo à partir du FPGA.
-
-Le contrôleur HDMI permet de produire les signaux nécessaires à l’affichage d’une image sur un écran. Il génère notamment les coordonnées des pixels ainsi que les signaux de synchronisation horizontale et verticale.
-
-Cette étape constitue une première mise en œuvre de l’affichage vidéo sur la carte FPGA DE10-Nano. Elle servira de base pour les étapes suivantes du projet, notamment le déplacement et la mémorisation d’un pixel dans le cadre de la réalisation d’un écran magique numérique.
-
-## 2. Principe de fonctionnement
-
-Le contrôleur HDMI repose sur le balayage de l’écran pixel par pixel. Chaque pixel est identifié par deux coordonnées :
-
-- `x` : position horizontale du pixel ;
-- `y` : position verticale du pixel.
-
-Ces coordonnées sont générées par des compteurs internes au contrôleur HDMI. Elles permettent de déterminer la couleur à afficher à chaque position de l’écran.
-
-Le contrôleur fournit également les signaux de synchronisation nécessaires au respect des timings vidéo.
-
-Le signal de sortie `o_hdmi_tx_d` représente la couleur du pixel courant. Il est constitué de 24 bits, répartis entre les trois composantes de couleur :
-
-| Composante   | Bits           |
-| ------------ | -------------- |
-| Rouge (Red)  | `23 downto 16` |
-| Vert (Green) | `15 downto 8`  |
-| Bleu (Blue)  | `7 downto 0`   |
-
-Chaque composante est codée sur 8 bits, ce qui permet de représenter 256 niveaux d’intensité par couleur.
-
-## 3. Simulation du contrôleur HDMI
-
-Avant l’intégration sur la carte FPGA, le contrôleur HDMI a été simulé à l’aide de l’environnement de simulation utilisé lors du TD 3.
-
-La simulation permet de vérifier le fonctionnement du composant et de contrôler la conformité des signaux temporels.
-
-Les principaux éléments observés sont :
-
-- l’évolution des compteurs de coordonnées ;
-- la synchronisation horizontale ;
-- la synchronisation verticale ;
-- les signaux associés à l’affichage des pixels.
-
-Les timings obtenus doivent correspondre à ceux définis lors du TD 3. Cette vérification est importante, car un décalage temporel peut entraîner un affichage incorrect sur l’écran.
-
-## 4. Intégration du contrôleur HDMI
-
-Une fois la simulation validée, le fichier `hdmi_controler.vhd` est ajouté au projet Quartus.
+Une fois la simulation validée, on ajoute le fichier `hdmi_controler.vhd` au projet Quartus.
 
 Le composant est ensuite instancié dans le fichier principal `telecran.vhd`.
 
@@ -254,22 +207,20 @@ i_clk   => s_clk_27,
 i_rst_n => s_rst_n,
 ```
 
-Les signaux non utilisés lors de cette étape sont laissés ouverts :
+Les signaux qu'on n'a pas utilisés lors de cette étape sont laissés ouverts relier le contrôleur HDMI au reste du système :
 
 ```vhdl
 o_pixel_en      => open,
 o_pixel_address => open,
 ```
 
-Cette instanciation permet de relier le contrôleur HDMI au reste du système.
-
 Le contrôleur utilise son horloge pour faire évoluer les coordonnées des pixels et générer les signaux nécessaires à l’affichage.
 
-## 5. Génération des couleurs à partir des coordonnées
+##  Génération des couleurs à partir des coordonnées
 
 Afin de vérifier le fonctionnement du contrôleur HDMI, les coordonnées des pixels sont utilisées pour générer une image simple.
 
-Les coordonnées horizontales et verticales sont converties en valeurs binaires sur 8 bits, puis affectées aux composantes rouge et verte du signal vidéo.
+Les coordonnées horizontales et verticales sont converties en valeurs binaires sur 8 bits, puis on les affectent aux composantes rouge ,verte et bleu du signal vidéo pour faire varier la couleur en fonction de la position du pixel sur l’écran à l'aide du code ci-dessous.
 
 ```vhdl
 o_hdmi_tx_d(23 downto 16) <=
@@ -281,17 +232,13 @@ o_hdmi_tx_d(15 downto 8) <=
 o_hdmi_tx_d(7 downto 0) <= (others => '0');
 ```
 
-Dans cette configuration :
+Ici :
 
 - la composante rouge dépend de la coordonnée horizontale ;
 - la composante verte dépend de la coordonnée verticale ;
 - la composante bleue est fixée à zéro.
 
-Ainsi, la couleur affichée varie en fonction de la position du pixel sur l’écran.
-
 Cette méthode permet de visualiser directement le balayage horizontal et vertical généré par le contrôleur HDMI.
-
-
 
 ## Conclusion
 Durant ce TP, nous sommes parvenu a correctement prendre en main le logiciel Quartus, faire analyser, assigner et compiler le programme et le visualiser sur la carte

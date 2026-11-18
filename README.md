@@ -59,13 +59,13 @@ Quartus Prime Lite est gratuit et disponible sous Windows et Linux.
 
 | Fichier | Rôle |
 |---------|------|
-| `telecran.vhd` | Entité principale : relie PLL, HDMI, encodeurs, RAM et effacement |
-| `encoder.vhd` | Décodage de deux encodeurs en quadrature → coordonnées X et Y |
-| `hdmi_controler.vhd` | Génération des signaux de synchronisation HDMI et des coordonnées de pixel |
-| `dpram.vhd` | Mémoire double port 720 × 480 × 8 bits (mémoire d'image) |
-| `i2c/` | Configuration I2C du transmetteur HDMI (`I2C_HDMI_Config.v`, …) |
-| `pll/` | PLL générant l'horloge pixel de 27 MHz à partir de l'horloge 50 MHz |
-| `telecran.qsf` / `.sdc` | Affectation des broches et contraintes de timing |
+| [`telecran.vhd`](telecran/telecran.vhd) | Entité principale : relie PLL, HDMI, encodeurs, RAM et effacement |
+| [`encoder.vhd`](telecran/encoder.vhd) | Décodage de deux encodeurs en quadrature → coordonnées X et Y |
+| [`hdmi_controler.vhd`](telecran/hdmi_controler.vhd) | Génération des signaux de synchronisation HDMI et des coordonnées de pixel |
+| [`dpram.vhd`](telecran/dpram.vhd) | Mémoire double port 720 × 480 × 8 bits (mémoire d'image) |
+| [`i2c/`](telecran/i2c) | Configuration I2C du transmetteur HDMI ([`I2C_HDMI_Config.v`](telecran/i2c/I2C_HDMI_Config.v), …) |
+| [`pll/`](telecran/pll) | PLL générant l'horloge pixel de 27 MHz à partir de l'horloge 50 MHz |
+| [`telecran.qsf`](telecran/telecran.qsf) / [`.sdc`](telecran/telecran.sdc) | Affectation des broches et contraintes de timing |
 
 ---
 
@@ -88,7 +88,7 @@ Quartus Prime Lite est gratuit et disponible sous Windows et Linux.
 
 Objectifs : configurer l'environnement, affecter les broches I/O, programmer la cible, puis passer de la logique combinatoire à la logique séquentielle.
 
-### Exercice 1 : contrôle combinatoire (`TP1_tuto_FPGA.vhd`)
+### Exercice 1 : contrôle combinatoire ([`TP1_tuto_FPGA.vhd`](TP1/TP1_tuto_FPGA.vhd))
 
 Une LED s'allume tant que le bouton poussoir est maintenu :
 
@@ -98,7 +98,7 @@ led0 <= pushl;
 
 Les entrées et sorties sont affectées aux broches de la carte dans le **Pin Planner**, puis le projet est compilé et implémenté.
 
-### Exercice 2 : division d'horloge (`led_blink.vhd`)
+### Exercice 2 : division d'horloge ([`led_blink.vhd`](TP1/led_blink.vhd))
 
 Une première version, sans division d'horloge, compile mais la LED **ne clignote pas de façon visible** : la fréquence est trop élevée pour l'œil. On ajoute donc un compteur qui génère un signal d'autorisation (`r_led_enable`) à fréquence réduite ; la LED change d'état à chaque impulsion.
 
@@ -180,7 +180,72 @@ Schéma bloc obtenu :
 - À chaque position, un pixel blanc (`0xFF`) est écrit dans la mémoire : le tracé **reste affiché**.
 - Le contrôleur HDMI lit en permanence la mémoire pour afficher l'image en niveaux de gris (la valeur 8 bits est répétée sur les canaux R, G et B).
 
-### 1. Contrôleur HDMI (`hdmi_controler.vhd`)
+### 1. Encodeurs ([`encoder.vhd`](telecran/encoder.vhd))
+
+Cette partie met l'affichage de côté et se concentre sur les **deux encodeurs rotatifs**. Le composant [`encoder`](telecran/encoder.vhd) incrémente un compteur quand on tourne l'encodeur vers la droite et le décrémente quand on le tourne vers la gauche. L'encodeur gauche donne la coordonnée **X** (`o_x`), l'encodeur droit la coordonnée **Y** (`o_y`).
+
+#### Signaux en quadrature
+
+Un encodeur fournit deux signaux **A** et **B** décalés d'un quart de période. L'ordre dans lequel A et B changent d'état indique le sens de rotation :
+
+| Action | Condition |
+|--------|-----------|
+| Incrément | front montant de A avec B bas, **ou** front descendant de A avec B haut |
+| Décrément | front montant de B avec A bas, **ou** front descendant de B avec A haut |
+
+#### Détection de front
+
+Chaque signal est échantillonné par deux bascules D en série. `q1` est la valeur courante et `q2` la valeur précédente. Un front est détecté quand les deux valeurs diffèrent :
+
+```
+        ┌─────┐  q1  ┌─────┐  q2
+ A ────►│ D Q ├──┬──►│ D Q ├──┐
+        └──▲──┘  │   └──▲──┘  │
+       clk_enable │  clk_enable│
+                  ▼            ▼
+   front montant    =  q1 ET (NON q2)
+   front descendant =  (NON q1) ET q2
+```
+
+```vhdl
+a_lrising  <= a_lq1 and not a_lq2;   -- front montant de A (encodeur gauche)
+a_lfalling <= not a_lq1 and a_lq2;   -- front descendant de A
+```
+
+#### Échantillonnage à 1 kHz
+
+Un prescaler divise l'horloge 50 MHz par 50 000 (`CLK_DIV_FACTOR`) et produit l'impulsion `clk_enable` à **1 kHz**. Les entrées A et B ne sont échantillonnées qu'à cette cadence, ce qui filtre les rebonds mécaniques des encodeurs.
+
+#### Comptage
+
+Pour chaque encodeur, un compteur 10 bits est mis à jour avec les conditions du tableau ci-dessus :
+
+```vhdl
+if (a_lrising and not b_lq2) = '1' or (a_lfalling and b_lq2) = '1' then
+    counter_left <= counter_left + 1;
+elsif (b_lrising and not a_lq2) = '1' or (b_lfalling and a_lq2) = '1' then
+    counter_left <= counter_left - 1;
+end if;
+```
+
+#### Interface
+
+| Port | Sens | Rôle |
+|------|------|------|
+| `clk`, `reset` | entrée | Horloge 50 MHz et reset (actif à l'état bas) |
+| `A_left`, `B_left` | entrée | Voies A et B de l'encodeur gauche |
+| `A_right`, `B_right` | entrée | Voies A et B de l'encodeur droit |
+| `o_x` | sortie | Valeur du compteur gauche → coordonnée X |
+| `o_y` | sortie | Valeur du compteur droit → coordonnée Y |
+| `o_leds` | sortie (`N` bits) | 4 bits de poids faible de chaque compteur, pour le débogage sur LEDs |
+
+Le paramètre générique `N` (8 par défaut) fixe la largeur du vecteur `o_leds`.
+
+> ℹ️ Le compteur 10 bits repasse de 0 à 1023 quand on décrémente sous zéro. Comme l'écran ne fait que 720 × 480, l'écriture en mémoire n'a lieu que si `x < 720` et `y < 480` : en dehors de l'écran, le point n'est pas tracé.
+
+Le composant est validé par simulation : voir la section [Simulation](#-simulation) et son chronogramme.
+
+### 2. Contrôleur HDMI ([`hdmi_controler.vhd`](telecran/hdmi_controler.vhd))
 
 Résolution **720 × 480**, horloge pixel **27 MHz** fournie par la PLL. Le contrôleur génère `hs`, `vs`, `de` ainsi que les coordonnées `x`, `y` et l'adresse du pixel courant (`y × 720 + x`).
 
@@ -191,7 +256,15 @@ Résolution **720 × 480**, horloge pixel **27 MHz** fournie par la PLL. Le cont
 | Front porch | 58 | 30 |
 | Back porch | 18 | 9 |
 
-Le transmetteur HDMI de la carte est configuré par I2C au démarrage (`I2C_HDMI_Config`). Les signaux d'horloge et de reset viennent de la PLL (`s_clk_27`, `s_rst_n`).
+#### À quels bits correspond chaque composante couleur ?
+
+Le signal `o_hdmi_tx_d` est un vecteur de **24 bits** au format **RGB 8-8-8** : chaque composante est codée sur 8 bits (valeurs de 0 à 255).
+
+| Bits | Composante |
+|------|-----------|
+| `23 downto 16` | Rouge |
+| `15 downto 8` | Vert |
+| `7 downto 0` | Bleu |
 
 Pour valider le contrôleur, une image de test a d'abord été générée à partir des coordonnées :
 
@@ -205,36 +278,46 @@ Résultat sur l'écran : la composante rouge croît avec X et la verte avec Y. L
 
 ![Image de test HDMI : dégradé rouge/vert issu des compteurs x et y](<Capture%20simulation/Capture%20d'%C3%A9cran%202026-11-05%20111251.png>)
 
-### 2. Lecture des encodeurs (`encoder.vhd`)
+Dans la version finale de [`telecran.vhd`](telecran/telecran.vhd), la valeur 8 bits lue en mémoire est recopiée sur les trois composantes (`q_b & q_b & q_b`) : le pixel est donc **noir** (`0x00`) ou **blanc** (`0xFF`).
 
-- Les signaux A et B de chaque encodeur sont **échantillonnés à 1 kHz** (prescaler de 50 000 sur l'horloge 50 MHz) : cela filtre les rebonds.
-- Les fronts de A et B sont détectés, et le **sens de rotation** est déduit de l'état de l'autre voie (décodage en quadrature).
-- Chaque encodeur incrémente ou décrémente un compteur 10 bits : `o_x` (gauche) et `o_y` (droit).
-- Les 4 bits de poids faible de chaque compteur sont recopiés sur 8 LEDs (`o_leds`) pour le débogage.
+### 3. Mémorisation ([`dpram.vhd`](telecran/dpram.vhd))
 
-Condition de comptage (par encodeur) :
+Pour conserver le dessin, les pixels parcourus sont stockés dans un **framebuffer** : une mémoire de 720 × 480 = 345 600 mots de 8 bits.
 
-| Action | Condition |
-|--------|-----------|
-| Incrément | front montant de A avec B bas, **ou** front descendant de A avec B haut |
-| Décrément | front montant de B avec A bas, **ou** front descendant de B avec A haut |
+#### Qu'est-ce qu'une mémoire dual-port ?
 
-> ℹ️ L'écriture en mémoire n'a lieu que si `x < 720` et `y < 480`. En dehors de l'écran, le point n'est pas tracé.
+Une mémoire **dual-port** est une RAM équipée de **deux ports d'accès indépendants**. Chaque port a sa propre adresse, sa propre donnée, son propre signal d'écriture et sa propre horloge. Les deux ports peuvent fonctionner **en même temps** : on peut par exemple écrire à une adresse par le port A pendant qu'on lit une autre adresse par le port B. Une mémoire simple port ne permet qu'un seul accès à la fois.
 
-### 3. Mémorisation (`dpram.vhd`)
-
-La mémoire **Dual-Port** de 720 × 480 mots de 8 bits possède deux ports indépendants, chacun avec sa propre horloge :
+Ici c'est indispensable : l'affichage doit lire un pixel à chaque cycle de l'horloge 27 MHz sans interruption, alors que les écritures arrivent à n'importe quel moment, au rythme des encodeurs, sur l'horloge 50 MHz. Deux horloges différentes et des accès simultanés : le dual-port évite tout arbitrage et tout trou dans l'image.
 
 | Port | Horloge | Rôle |
 |------|---------|------|
 | A | 50 MHz | Écriture du pixel dessiné (ou de l'effacement) |
-| B | 27 MHz | Lecture par le contrôleur HDMI pour l'affichage |
+| B | 27 MHz | Lecture par le contrôleur HDMI pour l'affichage (`we_b = '0'`) |
 
-Elle est instanciée dans `telecran.vhd` et la sortie du port B alimente `o_hdmi_tx_d`.
+#### Schéma de mémorisation des pixels
+
+```mermaid
+flowchart LR
+    ENC["encoder<br/>(x, y)"] --> ADR["adresse = y × 720 + x<br/>donnée = 0xFF<br/>écriture si x &lt; 720 et y &lt; 480"]
+    ADR -- "Port A : écriture (50 MHz)" --> RAM[("dpram<br/>720 × 480 × 8 bits")]
+    CLR["balayage d'effacement<br/>adresses 0 à 345 599, donnée 0x00"] -- "prioritaire" --> RAM
+    HDMI["hdmi_controler"] -- "o_pixel_adress (27 MHz)" --> RAM
+    RAM -- "Port B : q_b (8 bits)" --> OUT["o_hdmi_tx_d = q_b &amp; q_b &amp; q_b"]
+```
+
+Principe :
+
+1. Les coordonnées `(x, y)` des encodeurs sont converties en adresse mémoire `y × 720 + x`.
+2. Le port A écrit `0xFF` à cette adresse : le pixel est allumé, et il le reste.
+3. En parallèle, le contrôleur HDMI fournit l'adresse du pixel à afficher (`o_pixel_adress`) au port B.
+4. La valeur lue (`q_b`) est envoyée sur les trois composantes de `o_hdmi_tx_d`.
+
+Le composant [`dpram`](telecran/dpram.vhd) est instancié dans [`telecran.vhd`](telecran/telecran.vhd) avec ces connexions.
 
 ### 4. Effacement
 
-Le bouton poussoir de l'**encodeur droit** (`RIGHT_PB`, signal `rst`, actif à l'état bas) lance un **balayage de toute la mémoire** : l'adresse est incrémentée à chaque cycle d'horloge et la valeur `0x00` est écrite partout. Un multiplexeur donne la priorité à l'effacement sur le dessin tant que le balayage est en cours (≈ 345 600 cycles). Le même balayage est exécuté au démarrage.
+Dans [`telecran.vhd`](telecran/telecran.vhd), le bouton poussoir de l'**encodeur droit** (`RIGHT_PB`, signal `rst`, actif à l'état bas) lance un **balayage de toute la mémoire** : l'adresse est incrémentée à chaque cycle d'horloge et la valeur `0x00` est écrite partout. Un multiplexeur donne la priorité à l'effacement sur le dessin tant que le balayage est en cours (≈ 345 600 cycles). Le même balayage est exécuté au démarrage.
 
 ### 5. Broches principales
 
@@ -291,4 +374,4 @@ Ces travaux ont permis de prendre en main Quartus Prime (analyse, affectation de
 
 ## 👥 Auteurs
 
-Projet réalisé dans le cadre du module FPGA, 2ᵉ année (2026-2027).
+Projet réalisé par Alexandre MALEPART et Wissem MTIR dans le cadre du module FPGA, 2ᵉ année (2026-2027).

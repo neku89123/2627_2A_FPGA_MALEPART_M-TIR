@@ -161,57 +161,45 @@ Schéma RTL (Quartus) :
 
 Un compteur 23 bits compte les cycles d'horloge de 0 à 5 000 000, puis revient à 0. Quand il atteint 5 000 000, le signal `fin` passe à 1 et `r_led_enable` produit une impulsion d'un cycle. La bascule de la LED n'inverse sa sortie que lorsque `ENA` (= `r_led_enable`) vaut 1 : à 50 MHz, la LED change d'état environ toutes les 0,1 s.
 
-**a) Compteur et comparateur**
+Schéma théorique complet (un seul schéma) :
 
 ```
-                                          ┌─────────────────┐
-fin   ◄─────────────┬─────────────────────┤  = 5 000 000 ?  │◄──┐
-                    ▼                     └─────────────────┘   │
-              ┌───────────┐           ┌─────────────────┐       │
- 0 ──────────►│ 1         │           │                 │       │
-              │   MUX     ├──────────►│ D             Q ├───────┤
-              │           │           │                 │       │
-          ┌──►│ 0         │           │    compteur     │       │
-          │   └───────────┘           │    23 bits      │       │
-          │                           │                 │       │
-          │                           └────────▲────────┘       │
-          │           ┌───────┐               clk               │
-          └───────────┤ + 1   │◄────────────────────────────────┘
-                      └───────┘
-fin = 1 : le compteur repasse à 0 ; sinon il est incrémenté (+1)
+                                                    ┌─────────────────┐
+  ┌───────────────────────────┬─────────────────────┤  = 5 000 000 ?  │◄──┐
+  │ fin                       ▼                     └─────────────────┘   │
+  │                     ┌───────────┐           ┌─────────────────┐       │
+  │        0 ──────────►│ 1         │           │                 │       │
+  │                     │   MUX     ├──────────►│ D             Q ├───────┤
+  │                     │           │           │                 │       │
+  │                 ┌──►│ 0         │           │    compteur     │       │
+  │                 │   └───────────┘           │    23 bits      │       │
+  │                 │                           │                 │       │
+  │                 │                           └────────▲────────┘       │
+  │                 │           ┌───────┐               clk               │
+  │                 └───────────┤ + 1   │◄────────────────────────────────┘
+  │                             └───────┘
+  │
+  │         ┌─────────────────┐                             ┌─────────┐
+  └────────►│ D             Q ├─ r_led_enable ─┐    ┌───────┤   NON   ├◄────────┐
+            │                 │                │    │       └─────────┘         │
+            │      1 bit      │                │    │                           │
+i_rst_n ───►│ RST (→ '0')     │                │    │     ┌───────────────┐     │
+            │                 │                │    └────►│ D           Q ├─────┴────► o_led
+            └────────▲────────┘                │          │               │
+                    clk                        └─────────►│ ENA           │
+                                                          │               │
+                                          i_rst_n ───────►│ RST           │
+                                                          │               │
+                                                          │               │
+                                                          └───────▲───────┘
+                                                                 clk
 ```
 
-**b) Bascule `r_led_enable`** (mémorise l'impulsion `fin`)
+Le schéma se lit en trois blocs :
 
-```
-               ┌─────────────────┐
-fin ──────────►│ D             Q ├──────────► r_led_enable
-               │                 │
-               │      1 bit      │
-i_rst_n ──────►│ RST (→ '0')     │
-               │                 │
-               └────────▲────────┘
-                       clk
-```
-
-**c) Bascule de la LED, activée par `ENA`**
-
-```
-                            ┌─────────┐
-                    ┌───────┤   NON   ├◄────────┐
-                    │       └─────────┘         │
-                    │                           │
-                    │     ┌───────────────┐     │
-                    └────►│ D           Q ├─────┴────► o_led
-                          │               │
-r_led_enable ────────────►│ ENA           │
-                          │               │
-i_rst_n ─────────────────►│ RST           │
-                          │               │
-                          │               │
-                          └───────▲───────┘
-                                 clk
-```
+- **en haut** : le compteur 23 bits et son comparateur. Quand `fin` = 1, le compteur repasse à 0 ; sinon il est incrémenté (+1) ;
+- **en bas à gauche** : la bascule `r_led_enable`, qui mémorise l'impulsion `fin` ;
+- **en bas à droite** : la bascule de la LED, activée par `ENA` (= `r_led_enable`), dont la sortie est inversée à chaque impulsion.
 
 Toutes les bascules ont leur `RST` relié à `i_rst_n` et la même horloge `i_clk`.
 
@@ -227,7 +215,7 @@ La LED unique (`std_logic`) devient un vecteur de 10 LEDs (`std_logic_vector(9 d
 r_leds <= r_leds(8 downto 0) & r_leds(9);
 ```
 
-Le compteur et la bascule `r_led_enable` sont identiques à l'exercice 2 (schémas a et b). Seule la partie LED change : les 10 bascules forment un **registre à décalage circulaire**. Le bit de poids fort rebouclant sur le bit 0, le point lumineux repart du début après la dernière LED. Au reset, `r_leds(0)` vaut 1 et les autres 0.
+Le compteur et la bascule `r_led_enable` sont identiques à l'exercice 2 (partie haute et partie basse gauche du schéma de la version avec compteur). Seule la partie LED change : les 10 bascules forment un **registre à décalage circulaire**. Le bit de poids fort rebouclant sur le bit 0, le point lumineux repart du début après la dernière LED. Au reset, `r_leds(0)` vaut 1 et les autres 0.
 
 Schéma théorique :
 
@@ -400,84 +388,77 @@ Ici c'est indispensable : l'affichage doit lire un pixel à chaque cycle de l'ho
 
 #### Schéma de mémorisation des pixels
 
-Les rectangles `D Q` sont des **bascules D** (registres) et `MUX` des multiplexeurs. Le schéma se lit en trois blocs.
-
-**a) Écriture d'un pixel : adresse et autorisation d'écriture**
+Les rectangles `D Q` sont des **bascules D** (registres) et `MUX` des multiplexeurs. Le schéma complet tient en un seul dessin : il se lit de haut en bas pour la partie gauche (autorisation et adresse d'écriture, puis balayage d'effacement), les signaux `s_we_a`, `s_addr_a`, `s_clear_addr` et `s_clear` descendent ensuite sur la droite jusqu'au multiplexeur, puis le dessin se lit de droite à gauche (multiplexeur → mémoire dual-port → `o_hdmi_tx_d`).
 
 ```
-        ┌──────────┐
- y ────►│  × 720   ├────┐     ┌─────────┐
-        └──────────┘    └────►│         │
-                              │    +    ├────► s_addr_a  (= y × 720 + x)
- x ──────────────────────────►│         │
-                              └─────────┘
-
-        ┌──────────┐
- x ────►│ x < 720  ├────┐     ┌─────────┐
-        └──────────┘    └────►│         │
-                              │   ET    ├────► s_we_a
-        ┌──────────┐    ┌────►│         │
- y ────►│ y < 480  ├────┘     └─────────┘
-        └──────────┘
+                                 ┌──────────┐
+                          x ────►│ x < 720  ├────┐     ┌─────────┐
+                                 └──────────┘    └────►│         │
+Autorisation d'écriture                                │   ET    ├─── s_we_a ────────────────────────────────────┐
+                                 ┌──────────┐    ┌────►│         │                                               │
+                          y ────►│ y < 480  ├────┘     └─────────┘                                               │
+                                 └──────────┘                                                                    │
+                                                                                                                 │
+                                 ┌──────────┐                                                                    │
+                          y ────►│  × 720   ├────┐     ┌─────────┐                                               │
+                                 └──────────┘    └────►│         │                                               │
+Adresse d'écriture                                     │    +    ├─── s_addr_a ───────────────────────────────┐  │
+                          x ──────────────────────────►│         │                                            │  │
+                                                       └─────────┘                                            │  │
+                                                                                                              │  │
+                                                                                                              │  │
+Balayage d'effacement                      ┌────────────┐         ┌──────────────┐                            │  │
+                            0 ────────────►│ si rst='0' │         │              │                            │  │
+                                           │    MUX     ├────────►│ D          Q ├────┬─── s_clear_addr ───┐  │  │
+                            ┌─────────────►│ sinon      │         │   19 bits    │    │                    │  │  │
+                            │              └────────────┘         └──────▲───────┘    │                    │  │  │
+                            │                                            │            │                    │  │  │
+                            │                                       clk 50 MHz        │                    │  │  │
+                            │      ┌────────┐                                         │                    │  │  │
+                            └──────┤  + 1   │◄────────────────────────────────────────┤                    │  │  │
+                                   └────────┘                                         │                    │  │  │
+                                                                                      │                    │  │  │
+                                           ┌─────────────┐                            │                    │  │  │
+                                           │ = 345 599 ? │◄───────────────────────────┘                    │  │  │
+                                           └──────┬──────┘                                                 │  │  │
+                                                  │                                                        │  │  │
+                                                  ▼                                                        │  │  │
+                                           ┌────────────┐         ┌──────────────┐                         │  │  │
+                            rst ──────────►│ rst='0'→'1'│         │              │                         │  │  │
+                                           │    MUX     ├────────►│ D          Q ├───── s_clear ────────┐  │  │  │
+                                           │ fin   →'0' │         │    1 bit     │                      │  │  │  │
+                                           └────────────┘         └──────▲───────┘                      │  │  │  │
+                                                                         │                              │  │  │  │
+                                                                    clk 50 MHz                          │  │  │  │
+Multiplexeur, dpram et lecture                                              ┌───────────────────────────┘  │  │  │
+                                                                            ▼ s_clear (sélecteur)          │  │  │
+                                ┌──────────────┐                  ┌───────────────────┐                    │  │  │
+                                │              │                  │                 1 │◄─s_clear_addr──────┘  │  │
+                                │       addr_a │◄─────s_addr_mux──┤ MUX adresse       │                       │  │
+                                │              │                  │                 0 │◄─s_addr_a─────────────┘  │
+                                │       Port A │                  │                   │                          │
+                                │              │                  │                 1 │◄─── 0x00                 │
+                                │       data_a │◄─────s_data_mux──┤ MUX donnée        │                          │
+                                │     (50 MHz) │                  │                 0 │◄─── 0xFF                 │
+                                │              │                  │                   │                          │
+                                │              │                  │                 1 │◄─── '1'                  │
+                                │         we_a │◄─────s_we_mux────┤ MUX écriture      │                          │
+                                │              │                  │                 0 │◄─s_we_a──────────────────┘
+                                │        dpram │                  └───────────────────┘
+                                │    720 × 480 │
+                                │     × 8 bits │
+                                │              │
+                                │       addr_b │◄──────────────────────────────────────────────────── o_pixel_adress
+                                │              │                                                      (hdmi_controler)
+                                │         we_b │◄──────────────────────────────────────────────────── '0'
+                                │       Port B │
+                                │     (27 MHz) │
+o_hdmi_tx_d(23 downto 16) ◄──┬──┤ q_b          │
+ o_hdmi_tx_d(15 downto 8) ◄──┤  └──────────────┘
+  o_hdmi_tx_d(7 downto 0) ◄──┘
 ```
 
-Hors de l'écran, `s_we_a` vaut 0 et l'adresse est forcée à 0 : rien n'est écrit.
-
-**b) Balayage d'effacement : compteur d'adresses et drapeau `s_clear`**
-
-```
-                  ┌────────────┐         ┌──────────────┐
-   0 ────────────►│ si rst='0' │         │              │
-                  │    MUX     ├────────►│ D          Q ├────┬────► s_clear_addr
-   ┌─────────────►│ sinon      │         │   19 bits    │    │
-   │              └────────────┘         └──────▲───────┘    │
-   │                                            │            │
-   │                                       clk 50 MHz        │
-   │      ┌────────┐                                         │
-   └──────┤  + 1   │◄────────────────────────────────────────┤
-          └────────┘                                         │
-                                                             │
-                  ┌─────────────┐                            │
-                  │ = 345 599 ? │◄───────────────────────────┘
-                  └──────┬──────┘
-                         │
-                         ▼
-                  ┌────────────┐         ┌──────────────┐
-   rst ──────────►│ rst='0'→'1'│         │              │
-                  │    MUX     ├────────►│ D          Q ├────────► s_clear
-                  │ fin   →'0' │         │    1 bit     │
-                  └────────────┘         └──────▲───────┘
-                                                │
-                                           clk 50 MHz
-```
-
-Le compteur s'incrémente à chaque cycle tant que `s_clear = '1'`, puis `s_clear` retombe à 0 à la dernière adresse (345 599).
-
-**c) Multiplexeur, mémoire dual-port et lecture**
-
-```
-                       ┌───────────────────┐                  ┌──────────────┐
- s_addr_a ────────────►│ 0                 │                  │              │
- s_clear_addr ────────►│ 1   MUX adresse   ├─ s_addr_mux ────►│ addr_a       │
-                       │                   │                  │              │
- 0xFF ────────────────►│ 0                 │                  │ Port A       │
- 0x00 ────────────────►│ 1   MUX donnée    ├─ s_data_mux ────►│ data_a       │
-                       │                   │                  │ (50 MHz)     │
- s_we_a ──────────────►│ 0                 │                  │              │
- '1' ─────────────────►│ 1   MUX écriture  ├─ s_we_mux ──────►│ we_a         │
-                       └─────────▲─────────┘                  │              │
-                                 │                            │    dpram     │
-                         s_clear (sélecteur)                  │ 720 × 480    │
-                                                              │  × 8 bits    │
- o_pixel_adress ─────────────────────────────────────────────►│ addr_b       │
-   (hdmi_controler)                                           │              │
- '0' ────────────────────────────────────────────────────────►│ we_b         │
-                                                              │   Port B     │
-                                                              │  (27 MHz)    │
-                                                              │          q_b ├──┬──► o_hdmi_tx_d(23 downto 16)
-                                                              └──────────────┘  ├──► o_hdmi_tx_d(15 downto 8)
-                                                                                └──► o_hdmi_tx_d(7 downto 0)
-```
+Hors de l'écran, `s_we_a` vaut 0 et l'adresse est forcée à 0 : rien n'est écrit. Le compteur du balayage d'effacement s'incrémente à chaque cycle tant que `s_clear = '1'`, puis `s_clear` retombe à 0 à la dernière adresse (345 599).
 
 Principe :
 

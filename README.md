@@ -96,6 +96,13 @@ Une LED s'allume tant que le bouton poussoir est maintenu :
 led0 <= pushl;
 ```
 
+Schéma théorique : la sortie est directement reliée à l'entrée (logique combinatoire, aucune bascule).
+
+```
+ pushl ───────────────────────────► led0
+ (bouton poussoir)                   (LED)
+```
+
 Les entrées et sorties sont affectées aux broches de la carte dans le **Pin Planner**, puis le projet est compilé et implémenté.
 
 ### Exercice 2 : division d'horloge ([`led_blink.vhd`](TP1/led_blink.vhd))
@@ -123,17 +130,94 @@ end process;
 
 Il faut aussi assigner les broches d'**horloge** et de **reset** dans le Pin Planner.
 
-**Version sans division d'horloge** : on réalise d'abord un schéma théorique, puis on regarde le schéma RTL généré par Quartus. La LED ne clignote pas visiblement.
+**Légende des schémas** : les rectangles `D Q` sont des **bascules D** (registres), `NON` est un inverseur, `MUX` un multiplexeur, `RST` la remise à zéro asynchrone (active à l'état bas) et `▲ clk` l'entrée d'horloge.
 
-| Schéma théorique | Schéma RTL |
-|:---:|:---:|
-| ![Schéma théorique sans division d'horloge](TP1/Capture/schema1.png) | ![Schéma RTL, clignotement invisible](TP1/Capture/clignotement_led_invisible.png) |
+#### Version sans division d'horloge
 
-**Version avec compteur (division d'horloge)** : le clignotement devient visible.
+Une seule bascule D dont l'entrée `D` est l'inverse de la sortie `Q` : la LED change d'état à **chaque front montant** de l'horloge. Avec une horloge de 50 MHz, elle bascule à 25 MHz, bien trop vite pour l'œil : elle paraît simplement allumée.
 
-| Schéma théorique | Schéma RTL |
-|:---:|:---:|
-| ![Schéma théorique avec compteur](TP1/Capture/schema2.jpeg) | ![Schéma RTL, clignotement visible](TP1/Capture/clignotement_led.png) |
+Schéma théorique :
+
+```
+                          ┌─────────┐
+                  ┌───────┤   NON   ├◄──────┐
+                  │       └─────────┘       │
+                  │                         │
+                  │     ┌─────────────┐     │
+                  └────►│ D         Q ├─────┴────► o_led
+                        │             │
+i_rst_n        ────────►│ RST         │
+                        │             │
+                        │             │
+                        └──────▲──────┘
+                               clk
+```
+
+Schéma RTL (Quartus) :
+
+![Schéma RTL, clignotement invisible](TP1/Capture/clignotement_led_invisible.png)
+
+#### Version avec compteur (division d'horloge)
+
+Un compteur 23 bits compte les cycles d'horloge de 0 à 5 000 000, puis revient à 0. Quand il atteint 5 000 000, le signal `fin` passe à 1 et `r_led_enable` produit une impulsion d'un cycle. La bascule de la LED n'inverse sa sortie que lorsque `ENA` (= `r_led_enable`) vaut 1 : à 50 MHz, la LED change d'état environ toutes les 0,1 s.
+
+**a) Compteur et comparateur**
+
+```
+                                          ┌─────────────────┐
+fin   ◄─────────────┬─────────────────────┤  = 5 000 000 ?  │◄──┐
+                    ▼                     └─────────────────┘   │
+              ┌───────────┐           ┌─────────────────┐       │
+ 0 ──────────►│ 1         │           │                 │       │
+              │   MUX     ├──────────►│ D             Q ├───────┤
+              │           │           │                 │       │
+          ┌──►│ 0         │           │    compteur     │       │
+          │   └───────────┘           │    23 bits      │       │
+          │                           │                 │       │
+          │                           └────────▲────────┘       │
+          │           ┌───────┐               clk               │
+          └───────────┤ + 1   │◄────────────────────────────────┘
+                      └───────┘
+fin = 1 : le compteur repasse à 0 ; sinon il est incrémenté (+1)
+```
+
+**b) Bascule `r_led_enable`** (mémorise l'impulsion `fin`)
+
+```
+               ┌─────────────────┐
+fin ──────────►│ D             Q ├──────────► r_led_enable
+               │                 │
+               │      1 bit      │
+i_rst_n ──────►│ RST (→ '0')     │
+               │                 │
+               └────────▲────────┘
+                       clk
+```
+
+**c) Bascule de la LED, activée par `ENA`**
+
+```
+                            ┌─────────┐
+                    ┌───────┤   NON   ├◄────────┐
+                    │       └─────────┘         │
+                    │                           │
+                    │     ┌───────────────┐     │
+                    └────►│ D           Q ├─────┴────► o_led
+                          │               │
+r_led_enable ────────────►│ ENA           │
+                          │               │
+i_rst_n ─────────────────►│ RST           │
+                          │               │
+                          │               │
+                          └───────▲───────┘
+                                 clk
+```
+
+Toutes les bascules ont leur `RST` relié à `i_rst_n` et la même horloge `i_clk`.
+
+Schéma RTL (Quartus) :
+
+![Schéma RTL, clignotement visible](TP1/Capture/clignotement_led.png)
 
 ### Exercice 3 : chenillard
 
@@ -143,7 +227,26 @@ La LED unique (`std_logic`) devient un vecteur de 10 LEDs (`std_logic_vector(9 d
 r_leds <= r_leds(8 downto 0) & r_leds(9);
 ```
 
-Schéma bloc obtenu :
+Le compteur et la bascule `r_led_enable` sont identiques à l'exercice 2 (schémas a et b). Seule la partie LED change : les 10 bascules forment un **registre à décalage circulaire**. Le bit de poids fort rebouclant sur le bit 0, le point lumineux repart du début après la dernière LED. Au reset, `r_leds(0)` vaut 1 et les autres 0.
+
+Schéma théorique :
+
+```
+   ┌───────────────────────────────────────────────────────────────────────────────────────┐
+   │                                                                                       │
+   │  ┌─────────────┐      ┌─────────────┐      ┌─────────────┐          ┌─────────────┐   │
+   └─►│ D         Q ├──┬──►│ D         Q ├──┬──►│ D         Q ├──┬─···──►│ D         Q ├───┤
+      │  r_leds(0)  │  │   │  r_leds(1)  │  │   │  r_leds(2)  │  │       │  r_leds(9)  │   │
+      │ ENA         │  │   │ ENA         │  │   │ ENA         │  │       │ ENA         │   │
+      │ RST → 1     │  │   │ RST → 0     │  │   │ RST → 0     │  │       │ RST → 0     │   │
+      │             │  │   │             │  │   │             │  │       │             │   │
+      └──────▲──────┘  ▼   └──────▲──────┘  ▼   └──────▲──────┘  ▼       └──────▲──────┘   ▼
+            clk      LED0        clk      LED1        clk      LED2            clk       LED9
+ENA = r_led_enable et RST = i_rst_n pour les 10 bascules ; horloge clk commune.
+Chaque bit se décale d'un cran : r_leds <= r_leds(8 downto 0) & r_leds(9).
+```
+
+Schéma bloc obtenu (RTL Quartus) :
 
 ![Schéma bloc du chenillard](TP1/Capture/chenillard.png)
 
@@ -297,13 +400,83 @@ Ici c'est indispensable : l'affichage doit lire un pixel à chaque cycle de l'ho
 
 #### Schéma de mémorisation des pixels
 
-```mermaid
-flowchart LR
-    ENC["encoder<br/>(x, y)"] --> ADR["adresse = y × 720 + x<br/>donnée = 0xFF<br/>écriture si x &lt; 720 et y &lt; 480"]
-    ADR -- "Port A : écriture (50 MHz)" --> RAM[("dpram<br/>720 × 480 × 8 bits")]
-    CLR["balayage d'effacement<br/>adresses 0 à 345 599, donnée 0x00"] -- "prioritaire" --> RAM
-    HDMI["hdmi_controler"] -- "o_pixel_adress (27 MHz)" --> RAM
-    RAM -- "Port B : q_b (8 bits)" --> OUT["o_hdmi_tx_d = q_b &amp; q_b &amp; q_b"]
+Les rectangles `D Q` sont des **bascules D** (registres) et `MUX` des multiplexeurs. Le schéma se lit en trois blocs.
+
+**a) Écriture d'un pixel : adresse et autorisation d'écriture**
+
+```
+        ┌──────────┐
+ y ────►│  × 720   ├────┐     ┌─────────┐
+        └──────────┘    └────►│         │
+                              │    +    ├────► s_addr_a  (= y × 720 + x)
+ x ──────────────────────────►│         │
+                              └─────────┘
+
+        ┌──────────┐
+ x ────►│ x < 720  ├────┐     ┌─────────┐
+        └──────────┘    └────►│         │
+                              │   ET    ├────► s_we_a
+        ┌──────────┐    ┌────►│         │
+ y ────►│ y < 480  ├────┘     └─────────┘
+        └──────────┘
+```
+
+Hors de l'écran, `s_we_a` vaut 0 et l'adresse est forcée à 0 : rien n'est écrit.
+
+**b) Balayage d'effacement : compteur d'adresses et drapeau `s_clear`**
+
+```
+                  ┌────────────┐         ┌──────────────┐
+   0 ────────────►│ si rst='0' │         │              │
+                  │    MUX     ├────────►│ D          Q ├────┬────► s_clear_addr
+   ┌─────────────►│ sinon      │         │   19 bits    │    │
+   │              └────────────┘         └──────▲───────┘    │
+   │                                            │            │
+   │                                       clk 50 MHz        │
+   │      ┌────────┐                                         │
+   └──────┤  + 1   │◄────────────────────────────────────────┤
+          └────────┘                                         │
+                                                             │
+                  ┌─────────────┐                            │
+                  │ = 345 599 ? │◄───────────────────────────┘
+                  └──────┬──────┘
+                         │
+                         ▼
+                  ┌────────────┐         ┌──────────────┐
+   rst ──────────►│ rst='0'→'1'│         │              │
+                  │    MUX     ├────────►│ D          Q ├────────► s_clear
+                  │ fin   →'0' │         │    1 bit     │
+                  └────────────┘         └──────▲───────┘
+                                                │
+                                           clk 50 MHz
+```
+
+Le compteur s'incrémente à chaque cycle tant que `s_clear = '1'`, puis `s_clear` retombe à 0 à la dernière adresse (345 599).
+
+**c) Multiplexeur, mémoire dual-port et lecture**
+
+```
+                       ┌───────────────────┐                  ┌──────────────┐
+ s_addr_a ────────────►│ 0                 │                  │              │
+ s_clear_addr ────────►│ 1   MUX adresse   ├─ s_addr_mux ────►│ addr_a       │
+                       │                   │                  │              │
+ 0xFF ────────────────►│ 0                 │                  │ Port A       │
+ 0x00 ────────────────►│ 1   MUX donnée    ├─ s_data_mux ────►│ data_a       │
+                       │                   │                  │ (50 MHz)     │
+ s_we_a ──────────────►│ 0                 │                  │              │
+ '1' ─────────────────►│ 1   MUX écriture  ├─ s_we_mux ──────►│ we_a         │
+                       └─────────▲─────────┘                  │              │
+                                 │                            │    dpram     │
+                         s_clear (sélecteur)                  │ 720 × 480    │
+                                                              │  × 8 bits    │
+ o_pixel_adress ─────────────────────────────────────────────►│ addr_b       │
+   (hdmi_controler)                                           │              │
+ '0' ────────────────────────────────────────────────────────►│ we_b         │
+                                                              │   Port B     │
+                                                              │  (27 MHz)    │
+                                                              │          q_b ├──┬──► o_hdmi_tx_d(23 downto 16)
+                                                              └──────────────┘  ├──► o_hdmi_tx_d(15 downto 8)
+                                                                                └──► o_hdmi_tx_d(7 downto 0)
 ```
 
 Principe :
@@ -374,4 +547,4 @@ Ces travaux ont permis de prendre en main Quartus Prime (analyse, affectation de
 
 ## 👥 Auteurs
 
-Projet réalisé par Alexandre MALEPART et Wissem MTIR dans le cadre du module FPGA, 2ᵉ année (2026-2027).
+Projet réalisé dans le cadre du module FPGA, 2ᵉ année (2026-2027).

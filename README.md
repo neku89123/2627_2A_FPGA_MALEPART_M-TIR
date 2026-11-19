@@ -488,7 +488,10 @@ Dans [`telecran.vhd`](telecran/telecran.vhd), le bouton poussoir de l'**encodeur
 
 Les LEDs de la carte mezzanine utilisent les mêmes broches que dans le tableau du TP1. J2 correspond à GPIO0 et J1 à GPIO1.
 
-> 🚧 *À compléter : photos du résultat sur la carte (déplacement du pixel, tracé mémorisé, effacement).*
+
+
+https://github.com/user-attachments/assets/80702e4f-f41b-4528-abbd-9a8a80769589
+
 
 ---
 
